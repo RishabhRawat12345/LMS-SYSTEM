@@ -18,7 +18,7 @@ const Resetpass = () => {
         return
       }
       console.log(email)
-      const res=await axios.post("http://localhost:8000/api/reset/pass",{
+      const res=await axios.post("https://lms-system-1-183s.onrender.com/api/reset/pass",{
         email:email,
         pass:password
       })
