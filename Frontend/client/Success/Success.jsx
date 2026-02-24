@@ -12,7 +12,7 @@ const PaymentSuccess = () => {
     if (!courseId) return;
 
     axios.post(
-      `http://localhost:8000/api/course/confirm-enroll/${courseId}`,
+      ` https://lms-system-1-183s.onrender.com/api/course/confirm-enroll/${courseId}`,
       {},
       { withCredentials: true }
     );
