@@ -33,18 +33,12 @@ export const signUp = async (req, res) => {
     });
 
     const token = await gentoken(user._id);
-    res.cookie("token", token, {
+  res.cookie("token", token, {
       httpOnly: true,
       secure: true,         
       sameSite: "none",     
       maxAge: 7 * 24 * 60 * 60 * 1000,
      });
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: false,
-      sameSite: "Strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
 
     return res.status(201).json({
       message: "User successfully created",
@@ -83,10 +77,10 @@ export const signin = async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false,
-      sameSite: "Strict",
+      secure: true,         
+      sameSite: "none",     
       maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+     });
 
     return res.status(200).json({
       message: "User signed in successfully",
@@ -129,10 +123,10 @@ export const Gsignup=async(req,res)=>{
      const token=gentoken(user._id);
       res.cookie("token", token, {
       httpOnly: true,
-      secure: false,
-      sameSite: "Strict",
+      secure: true,         
+      sameSite: "none",     
       maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+     });
     res.status(200).json({
       message: "Google signup success",
       user,
@@ -184,10 +178,10 @@ export const GoogleSigin = async (req, res) => {
     const token=gentoken(user._id);
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax",
+      secure: true,         
+      sameSite: "none",     
       maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+     });
     res.status(200).json({
       message: "Signin success",
       user,
