@@ -15,7 +15,7 @@ const CreateLecture = () => {
   const fetchlecture = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:8000/api/course/getClecture/${courseid}`,
+        ` https://lms-system-1-183s.onrender.com/api/course/getClecture/${courseid}`,
         { withCredentials: true }
       );
 
@@ -37,7 +37,7 @@ const CreateLecture = () => {
       e.preventDefault();
 
       const res = await axios.post(
-        `http://localhost:8000/api/course/lectureAdd/${courseid}`,
+        ` https://lms-system-1-183s.onrender.com/api/course/lectureAdd/${courseid}`,
         { lecturetitle: lectureTitle },
         { withCredentials: true }
       );
@@ -58,7 +58,7 @@ const CreateLecture = () => {
   const handledelete = async (lectureid) => {
     try {
       const res = await axios.delete(
-        `http://localhost:8000/api/course/removelec/${lectureid}`,
+        ` https://lms-system-1-183s.onrender.com/api/course/removelec/${lectureid}`,
         { withCredentials: true }
       );
 
