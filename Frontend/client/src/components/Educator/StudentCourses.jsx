@@ -11,7 +11,7 @@ const StudentCourses = () => {
   const fetchdata = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:8000/api/course/enrolledC",
+        "https://lms-system-1-183s.onrender.com/api/course/enrolledC",
         { withCredentials: true }
       );
       if (res.status === 200) {
