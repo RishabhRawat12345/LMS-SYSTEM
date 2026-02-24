@@ -8,7 +8,7 @@ import Signin from "./components/Signin/Signin";
 import Home from "./components/Home/Home";
 import Profile from "./components/Profile/Profile";
 import Course from "./components/Educator/Course";
-import Forgetpass from "./components/passwordreset/forgetpass";
+import Forgetpass from "./components/passwordreset/Forgetpass";
 import Otp from "./components/passwordreset/Otp";
 import Resetpass from "./components/passwordreset/Resetpass";
 import Role from "./components/role/Role";
