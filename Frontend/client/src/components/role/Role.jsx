@@ -11,7 +11,7 @@ const Role = () => {
     try {
       console.log(email);
       console.log(val);
-      const res=await axios.post("http://localhost:8000/api/auth/roleup",{
+      const res=await axios.post(" https://lms-system-1-183s.onrender.com/api/auth/roleup",{
         email:email,
         role:val
       })
