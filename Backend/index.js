@@ -18,7 +18,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://lms-system-lyart.vercel.app",
     credentials: true,
   })
 );
