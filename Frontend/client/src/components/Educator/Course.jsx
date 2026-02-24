@@ -82,7 +82,9 @@ const Course = ({ coursedata = [] }) => {
                   >
                     
                     <td className="p-4">
-                      <div className="flex items-center gap-4">
+                      <div  onClick={()=>navigate("/aboutC",{
+                state:course._id
+              })} className="flex items-center gap-4">
                         <img
                           src={c.thumnail}
                           alt={c.title}

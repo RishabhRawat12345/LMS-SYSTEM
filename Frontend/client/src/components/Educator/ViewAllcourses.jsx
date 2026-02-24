@@ -1,15 +1,32 @@
-import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import Nav from "../nav/Nav";
+import axios from "axios";
 
 const ViewAllcourses = () => {
+  const navigate=useNavigate()
   const location = useLocation();
-  const coursedata = location.state?.coursedata || [];
-
+  const [coursedata,Setcoursedata]=useState([]);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
 
-  const filteredCourses = coursedata.filter((course) => {
+  const fetchdata=async()=>{
+    try {
+      const res=await axios.get("http://localhost:8000/api/course/getpublished");
+     
+      if(res.status===200){
+        console.log("the data of courses",res.data);
+        Setcoursedata(res.data);
+      }
+    } catch (error) {
+      console.log("error in getting course data",error);      
+    }
+  }
+  useEffect(()=>{
+    fetchdata()
+  },[]);
+  const courses = coursedata?.course || []
+  const filteredCourses = courses.filter((course) => {
     const text = `
       ${course.title}
       ${course.subtitle}
@@ -29,8 +46,9 @@ const ViewAllcourses = () => {
 
   return (
     <div className="w-full min-h-screen bg-gray-50">
+      <Nav/>
       <div className="w-full flex flex-col items-center p-6">
-        <div className="w-full max-w-3xl flex flex-col md:flex-row gap-4 mb-8">
+        <div className="w-full max-w-3xl flex flex-col md:flex-row gap-4 mb-8 mt-20">
 
           <input
             type="text"
@@ -77,6 +95,9 @@ const ViewAllcourses = () => {
             {filteredCourses.map((course) => (
 
               <div
+                 onClick={()=>navigate("/aboutC",{
+                state:course._id
+              })}
                 key={course._id}
                 className="bg-white rounded-xl shadow-md hover:shadow-xl transition overflow-hidden"
               >

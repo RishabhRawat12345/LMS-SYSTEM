@@ -1,7 +1,8 @@
 
+import mongoose from "mongoose";
 import  cloudinary from "../middleware/Cloudinary.js";
 import Course from "../models/courseModel.js";
-
+import Stripe from "stripe";
 export const createCourse = async (req, res) => {
   try {
     const { title, categorie,price } = req.body;
@@ -34,7 +35,7 @@ export const createCourse = async (req, res) => {
 };
 
 
-export const getCourse=async()=>{
+export const getCourse=async(req,res)=>{
 
     try {
         const course=await Course.find({isPublised:true});
@@ -49,9 +50,11 @@ export const getCourse=async()=>{
 
 export const getCreatorCourse=async(req,res)=>{
     try {
-        const userId= req.userId;
-        console.log("the user id ",userId)
+        console.log("req.userId:", req.userId);
+        const userId=new mongoose.Types.ObjectId(req.userId);
+        console.log("the user id is",userId)
         const creatorCourse=await Course.find({creator:userId})
+        console.log("the course",creatorCourse)
         if(!creatorCourse){
           return res.status(400).json({message:"creator Course is not found"});
         }
@@ -160,4 +163,21 @@ export const deleteCourse=async(req,res)=>{
     } catch (error) {
         return res.status(500).json({message:`Error is come to delete a course ${error}`})
     }
+}
+
+
+export const lecturePayment=async(req,res)=>{
+  try {
+    const {amount}=req.body;
+    const payment= await Stripe.paymentIntents.create({
+      amount:amount*100,
+      currency:"inr"
+    })
+
+    res.send({
+      clientSecret:payment.client_secret,
+    })
+  } catch (error) {
+    res.status(500).json({message:`payment Internal Server error`})
+  }
 }

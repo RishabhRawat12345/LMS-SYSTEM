@@ -20,9 +20,8 @@ const Signup = () => {
       const res = await axios.post(
         "http://localhost:8000/api/auth/signup",
         form,
-        { withCredentials: true }
       );
-      console.log("the token data",token);
+
       toast.success("Signup successfully 🎉");
       navigate("/signin");
 

@@ -11,7 +11,7 @@ const coursehooks = () => {
       dispatch(coursestart());
       const res=await axios.get("http://localhost:8000/api/course/getCreator",{withCredentials:true});
      
-      console.log(res);
+      console.log("the courses is",res.data);
       dispatch(getcourse(res.data.creatorCourse))
       return res.data.creatorCourse;
     } catch (error) {

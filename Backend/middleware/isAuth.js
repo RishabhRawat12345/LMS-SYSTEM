@@ -4,7 +4,7 @@ const isAuth = async (req, res, next) => {
   try {
     let { token } = req.cookies;
      
-    console.log("🍪 Token received:", req.cookies);
+    console.log("Token received:", req.cookies);
 
     if (!token) {
       return res.status(400).json({ message: "not have token" });
@@ -12,7 +12,7 @@ const isAuth = async (req, res, next) => {
 
     let verifytoken = jwt.verify(token, process.env.JWT_SECRET);
 
-    console.log("✅ Verified token:", verifytoken);
+    console.log(" Verified token:", verifytoken);
 
     req.userId = verifytoken.userid;
 

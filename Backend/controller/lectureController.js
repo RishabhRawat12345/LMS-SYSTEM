@@ -60,10 +60,11 @@ export const getCourselecture=async(req,res)=>{
         if(!courseId){
             return res.status(400).json({message:"course id is missing"});
         }
-        const course=await Course.findById({courseId});
+        const course=await Course.findById(courseId);
         await course.populate("lectures");
         await course.save();
-        return res.status(200).json({message:"the course get successfully"},course);
+
+        return res.status(200).json({message:"the course get successfully",course});
     } catch (error) {
         return res.status(500).json({message:`error for getting coures lecture:${error}`})
     }
@@ -72,8 +73,8 @@ export const getCourselecture=async(req,res)=>{
 export const editLecture=async(req,res)=>{
     try {
         const {lecturetitle,isPreviewFee}=req.body;
-        const {lectureId}=req.params
-        if(lectureId){
+        const {lectureid}=req.params
+        if(!lectureid){
             return res.status(400).json({message:'lecture id is missing'})
         }
         if(!lecturetitle||!isPreviewFee){
@@ -82,7 +83,7 @@ export const editLecture=async(req,res)=>{
         if(!req.file){
             return res.status(400).json({message:"the video lecture not present"})
         }
-        const lecture=await lecture.findById({lectureId});
+        const lecture=await Lecture.findById(lectureid);
         let video;
         if(req.file){
              video=await cloudinary.uploader.upload(
@@ -92,7 +93,8 @@ export const editLecture=async(req,res)=>{
                     folder:"courses/video"
                 }
             )
-            lecture.videoUrl=video;
+            lecture.videoUrl = video.secure_url;
+
         }
         if(lecturetitle){
              lecture.lecturetitle=lecturetitle;
@@ -112,8 +114,8 @@ export const removelecture=async(req,res)=>{
     if(!lectureid){
         return res.status(400).json({message:"lecture id is not present"});
     }
-    const lecture=await lecture.findByIdAndDelete({lectureid});
-    
+    const lecture=await Lecture.findByIdAndDelete(lectureid);
+    console.log("delete status:",lecture);
     if(!lecture){
        return res.status(400).json({message:"lecture is not found"});
     }
@@ -122,7 +124,7 @@ export const removelecture=async(req,res)=>{
     },{
         $pull:{lectures:lectureid}
     })
-     return res.status(200).json({message:'lecture is deleted successfully'},course);
+     return res.status(200).json({message:'lecture is deleted successfully',course});
     } catch (error) {
         return res.status(500).json({message:`remove lecture error ${error}`});
     }

@@ -145,7 +145,7 @@ export const Gsignup=async(req,res)=>{
 export const roleup=async(req,res)=>{
   try {
     const {email,role}=req.body;
-
+    console.log("the role data",req.body)
     if(!email || !role){
        res.status(400).json({message:"data is missing"});
     }
@@ -153,7 +153,7 @@ export const roleup=async(req,res)=>{
     const user=await User.findOne({email});
 
     user.role=role;
-
+    await user.save()
     res.status(200).json({message:"successfully"});
   } catch (error) {
     res.status(500).json({message:"Gsignup error is coming"});
@@ -163,7 +163,6 @@ export const roleup=async(req,res)=>{
 export const GoogleSigin = async (req, res) => {
   try {
     const { email } = req.body;
-    console.log("gsignin",email)
     if (!email) {
       return res.status(400).json({
         message: "Email required",

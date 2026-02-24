@@ -14,16 +14,15 @@ const Nav = ({userdata}) => {
   
   useEffect(() => {
     if (userdata) {
-      
+      console.log("the userdata",userdata)
       setUser(userdata);
     } else {
-      const data=JSON.parse(localStorage.getItem("user"));
+      const stored = localStorage.getItem("user");
+      const data = stored ? JSON.parse(stored) : null;
       setUser(data);
     }
   }, [userdata]);
-  useEffect(()=>{
-    console.log("the user data",user);
-  })
+ 
   const handlelogout = () => {
     dispatch(logoutSuccess());
     localStorage.removeItem("user");
@@ -46,6 +45,7 @@ const Nav = ({userdata}) => {
               onClick={() => setOpen(!open)}
               className="h-8 w-8 sm:h-10 sm:w-10 cursor-pointer rounded-full"
               alt="profile"
+              referrerPolicy="no-referrer"
             />
           ) : (
             <FaUserCircle

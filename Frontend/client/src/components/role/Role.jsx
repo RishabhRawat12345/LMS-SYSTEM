@@ -42,7 +42,7 @@ const Role = () => {
             Student
           </button>
           <button
-            onClick={() => rolehandler("Educator")}
+            onClick={() => rolehandler("educator")}
             className="flex flex-col items-center justify-center gap-4 h-56 w-56 rounded-2xl bg-white text-black font-semibold shadow-xl hover:bg-black hover:text-white transition-all duration-300"
           >
             <GraduationCap size={50} />

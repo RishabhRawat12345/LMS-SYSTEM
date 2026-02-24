@@ -1,140 +1,164 @@
 import React, { useEffect, useState } from "react";
-import { FaArrowLeft } from "react-icons/fa";
-import axios from "axios";
+import { FaArrowLeft, FaBookOpen, FaUsers, FaRupeeSign } from "react-icons/fa";
 import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
-  ResponsiveContainer,
+  BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer,
 } from "recharts";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import StudentCourses from "./StudentCourses";
 
-const Dashboard = () => {
+const Dashboard = ({ userdata, coursedata }) => {
   const navigate = useNavigate();
-  const { courseId } = useParams();
-  const [course, setCourse] = useState(null);
-
-  const data = [
-    { name: "Jan", sales: 400 },
-    { name: "Feb", sales: 300 },
-    { name: "Mar", sales: 500 },
-    { name: "Apr", sales: 200 },
-  ];
-
-  const getcourse = async () => {
-    try {
-      const res = await axios.get(
-        `http://localhost:8000/api/course/getcourseID/${courseId}`
-      );
-
-      if (res.status === 200) {
-        setCourse(res.data.course);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const [courses, setCourses] = useState([]);
 
   useEffect(() => {
-    if (courseId) getcourse();
-  }, [courseId]);
+    if (coursedata) setCourses(coursedata);
+  }, [coursedata]);
+
+  const isEducator = userdata?.role === "educator";
+
+  const lecturesGraphData = courses?.map((course) => ({
+    name: course.title,
+    lectures: course.lectures?.length || 0,
+  })) || [];
+
+  const studentsGraphData = courses?.map((course) => ({
+    name: course.title,
+    students: course.enrolled_Student?.length || 0,
+  })) || [];
+
+  const totalEarnings = courses?.reduce(
+    (acc, course) => acc + (course.price || 0) * (course.enrolled_Student?.length || 0), 0
+  ) || 0;
+
+  const totalStudents = courses?.reduce(
+    (acc, course) => acc + (course.enrolled_Student?.length || 0), 0
+  ) || 0;
+
+  const totalLectures = courses?.reduce(
+    (acc, course) => acc + (course.lectures?.length || 0), 0
+  ) || 0;
 
   return (
-    <div className="flex flex-col p-4 md:p-10 gap-6 md:gap-10">
-      
-      {/* 🔹 Top Section */}
-      <div className="flex flex-col gap-4">
-
-        {/* Back Button */}
-        <FaArrowLeft
+    <div className="min-h-screen bg-gray-50 flex flex-col p-4 md:p-10 gap-8">
+      <div className="flex flex-col gap-6 mt-16">
+        <button
           onClick={() => navigate("/home")}
-          size={22}
-          className="cursor-pointer"
-        />
+          className="flex items-center gap-2 text-gray-600 hover:text-black transition w-fit"
+        >
+          <FaArrowLeft size={16} />
+          <span className="text-sm font-medium">Back to Home</span>
+        </button>
 
-        {/* Profile Card */}
-        <div className="flex flex-col md:flex-row items-center md:items-start gap-4 shadow-xl rounded-xl p-4 md:p-6 w-full">
+        <div className="flex flex-col md:flex-row items-center md:items-start gap-6 bg-white rounded-2xl shadow-sm border border-gray-100 p-6 w-full">
+          <div className="relative">
+            <img
+              src={userdata?.photoUrl || ""}
+              className="h-24 w-26 rounded-full object-cover ring-4 ring-gray-100"
+              referrerPolicy="no-referrer"
+              alt="profile"
+            />
+            <span className="absolute bottom-1 right-1 h-4 w-4 bg-green-400 rounded-full border-2 border-white"></span>
+          </div>
 
-          {/* Profile Image */}
-          <img
-            src={course?.thumbnail || ""}
-            className="h-24 w-24 md:h-30 md:w-30 rounded-full bg-black object-cover"
-            alt="profile"
-          />
-
-          {/* Profile Info */}
           <div className="flex flex-col text-center md:text-left gap-2 w-full">
-
-            <h1 className="text-xl md:text-2xl font-bold">
-              Welcome, Rishabh Rawat
-            </h1>
-
-            <h1 className="text-lg md:text-xl font-bold flex flex-col md:flex-row gap-1 md:gap-2 items-center md:items-start justify-center md:justify-start">
-              Total Earning:
-              <span className="font-medium">
-                {course?.earning || "0"}$
+            <div>
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+                Welcome back, {userdata?.name} 👋
+              </h1>
+              <span className="inline-block mt-1 px-3 py-1.5 bg-black text-white text-xs rounded-full capitalize">
+                {userdata?.role}
               </span>
-            </h1>
+            </div>
 
-            <h5 className="text-sm md:text-base text-gray-600">
-              CS Student
-            </h5>
-
-            {/* Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 mt-2 w-full md:w-auto">
-
+            <div className="flex flex-col sm:flex-row gap-3 mt-3">
+              {isEducator && (
+                <button
+                  onClick={() => navigate("/createCourse")}
+                  className="px-5 py-2 bg-black text-white text-sm rounded-lg hover:bg-gray-800 transition"
+                >
+                  + Create Course
+                </button>
+              )}
               <button
-                onClick={() => navigate("/createCourse")}
-                className="w-full sm:w-40 h-10 bg-black text-white rounded"
-              >
-                Create Course
-              </button>
-
-              <button
-                onClick={() => navigate("/courses")}
-                className="w-full sm:w-40 h-10 bg-black text-white rounded"
+                onClick={() => userdata.role==='educator'? navigate("/courses"): navigate("/viewc")}
+                className="px-5 py-2 bg-gray-100 text-gray-800 text-sm rounded-lg hover:bg-gray-200 transition"
               >
                 View Courses
               </button>
-
             </div>
           </div>
         </div>
       </div>
 
-      {/* 🔹 Charts Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-10">
+      {!isEducator ? (
+        <StudentCourses userdata={userdata} coursedata={coursedata} />
+      ) : (
+        <div className="flex flex-col gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex items-center gap-4">
+              <div className="h-12 w-12 bg-blue-50 rounded-xl flex items-center justify-center">
+                <FaBookOpen className="text-blue-500" size={20} />
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">Total Lectures</p>
+                <p className="text-2xl font-bold text-gray-900">{totalLectures}</p>
+              </div>
+            </div>
 
-        {/* Chart 1 */}
-        <div className="w-full h-[250px] md:h-[300px] shadow-lg rounded-xl p-3 md:p-4">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={data}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="sales" />
-            </BarChart>
-          </ResponsiveContainer>
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex items-center gap-4">
+              <div className="h-12 w-12 bg-green-50 rounded-xl flex items-center justify-center">
+                <FaUsers className="text-green-500" size={20} />
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">Total Students</p>
+                <p className="text-2xl font-bold text-gray-900">{totalStudents}</p>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex items-center gap-4">
+              <div className="h-12 w-12 bg-yellow-50 rounded-xl flex items-center justify-center">
+                <FaRupeeSign className="text-yellow-500" size={20} />
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">Total Earnings</p>
+                <p className="text-2xl font-bold text-gray-900">₹{totalEarnings.toLocaleString()}</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+              <h2 className="font-semibold text-gray-800 mb-4">Lectures Per Course</h2>
+              <div className="h-[280px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={lecturesGraphData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                    <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+                    <YAxis allowDecimals={false} domain={[0, 8]} tickCount={9} tick={{ fontSize: 12 }} />
+                    <Tooltip />
+                    <Bar dataKey="lectures" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+              <h2 className="font-semibold text-gray-800 mb-4">Students Enrolled Per Course</h2>
+              <div className="h-[280px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={studentsGraphData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                    <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+                    <YAxis allowDecimals={false} domain={[0, 8]} tickCount={9} tick={{ fontSize: 12 }} />
+                    <Tooltip />
+                    <Bar dataKey="students" fill="#22c55e" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          </div>
         </div>
-
-        {/* Chart 2 */}
-        <div className="w-full h-[250px] md:h-[300px] shadow-lg rounded-xl p-3 md:p-4">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={data}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="sales" />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-
-      </div>
+      )}
     </div>
   );
 };
