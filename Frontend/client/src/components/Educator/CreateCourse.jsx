@@ -17,7 +17,7 @@ const CreateCourse = ({userdata}) => {
   const handlecreate=async(e)=>{
      e.preventDefault();
     try {
-        const res=await axios.post("http://localhost:8000/api/course/create",form,{
+        const res=await axios.post(" https://lms-system-1-183s.onrender.com/api/course/create",form,{
            withCredentials: true
         });
         if(res.status===200){
