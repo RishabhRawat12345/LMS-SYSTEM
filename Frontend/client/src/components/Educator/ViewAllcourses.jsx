@@ -12,7 +12,7 @@ const ViewAllcourses = () => {
 
   const fetchdata=async()=>{
     try {
-      const res=await axios.get("http://localhost:8000/api/course/getpublished");
+      const res=await axios.get("https://lms-system-1-183s.onrender.com/api/course/getpublished");
      
       if(res.status===200){
         console.log("the data of courses",res.data);
