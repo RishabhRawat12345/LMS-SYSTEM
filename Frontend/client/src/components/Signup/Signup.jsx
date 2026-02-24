@@ -37,7 +37,7 @@ const Signup = () => {
       console.log(gauth.user.displayName);
       console.log(gauth.user.photoURL);
       console.log(role)
-      const res=await axios.post("http://localhost:8000/api/auth/Gsignup",{
+      const res=await axios.post("https://lms-system-1-183s.onrender.com/api/auth/Gsignup",{
         email:gauth.user.email,
         name:gauth.user.displayName,
         photoUrl:gauth.user.photoURL
