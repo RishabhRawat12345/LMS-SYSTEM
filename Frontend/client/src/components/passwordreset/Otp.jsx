@@ -28,7 +28,7 @@ const Otp = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:8000/api/reset/votp",
+        "https://lms-system-1-183s.onrender.com/api/reset/votp",
         {
           email: forEmail,
           otp: otp,
