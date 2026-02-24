@@ -9,7 +9,7 @@ const coursehooks = () => {
   const fetchdata=async()=>{
     try {
       dispatch(coursestart());
-      const res=await axios.get("http://localhost:8000/api/course/getCreator",{withCredentials:true});
+      const res=await axios.get("https://lms-system-1-183s.onrender.com/api/course/getCreator",{withCredentials:true});
      
       console.log("the courses is",res.data);
       dispatch(getcourse(res.data.creatorCourse))
