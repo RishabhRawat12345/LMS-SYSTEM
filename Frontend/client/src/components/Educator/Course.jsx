@@ -19,7 +19,7 @@ const Course = ({ coursedata = [] }) => {
   const handleDelete = async (id) => {
     try {
       const res = await axios.delete(
-        `http://localhost:8000/api/course/deleteCourse/${id}`,
+        ` https://lms-system-1-183s.onrender.com/api/course/deleteCourse/${id}`,
         { withCredentials: true }
       );
 
