@@ -131,7 +131,7 @@ const EditCourse = () => {
 
       const res =
         await axios.post(
-          `http://localhost:8000/api/course/editCourse/${data}`,
+          ` https://lms-system-1-183s.onrender.com/api/course/editCourse/${data}`,
           formData,
           {
             withCredentials: true,
