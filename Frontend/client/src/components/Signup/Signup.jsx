@@ -18,7 +18,7 @@ const Signup = () => {
   const handleSignup = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:8000/api/auth/signup",
+        "https://lms-system-1-183s.onrender.com/api/auth/signup",
         form,
       );
 
