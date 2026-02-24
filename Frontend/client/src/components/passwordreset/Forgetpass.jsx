@@ -12,7 +12,7 @@ const Forgetpass = () => {
 
     try {
       const res = await axios.post(
-        'http://localhost:8000/api/reset/sentotp',
+        'https://lms-system-1-183s.onrender.com/api/reset/sentotp',
         { email }   // send as object
       );
 
