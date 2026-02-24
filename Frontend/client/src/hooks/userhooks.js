@@ -7,7 +7,7 @@ const useUserHook = () => {
 
   const getUserById = async (id) => {
     try {
-      const res = await axios.get(`http://localhost:8000/api/user/${id}`);
+      const res = await axios.get(`https://lms-system-1-183s.onrender.com/api/user/${id}`);
       console.log("User response:", res.data);
       localStorage.setItem("user", JSON.stringify(res.data.userdata));
       dispatch(loginSuccess(res.data.userdata));
