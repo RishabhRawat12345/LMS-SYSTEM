@@ -50,7 +50,7 @@ const GoogleSignin = async () => {
   try {
     const gauth = await signInWithPopup(auth, provider);
     const res = await axios.post(
-      "http://localhost:8000/api/auth/Gsignin",
+      "https://lms-system-1-183s.onrender.com/api/auth/Gsignin",
       { email: gauth.user.email },
       { withCredentials: true }  
     );
