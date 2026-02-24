@@ -31,7 +31,7 @@ const EditLecture = () => {
       console.log("Lecture ID:", lectureid);
 
       const res = await axios.post(
-        `http://localhost:8000/api/course/editLec/${lectureid}`,
+        ` https://lms-system-1-183s.onrender.com/api/course/editLec/${lectureid}`,
         data,
         {
           withCredentials: true,
