@@ -85,17 +85,10 @@ const Profile = () => {
           {edit === false && (
             <form className='w-[60%] flex flex-col gap-4 justify-center items-center mt-6'>
               <div className="flex items-center gap-2 w-full">
-                <label className='font-medium text-black w-32'>Email:</label>
                 <input value={data?.email || ""} className='flex-1 h-10 rounded text-sm font-semibold outline-none' readOnly />
               </div>
 
-              {/* HIDE BIO IF EDUCATOR */}
-              {data?.role !== "educator" && (
-                <div className="flex items-center gap-2 w-full">
-                  <label className='font-medium text-black w-32'>Bio:</label>
-                  <input value={data?.bio || ""} className='flex-1 h-10 rounded px-3 text-sm font-semibold outline-none' readOnly />
-                </div>
-              )}
+           
 
               {/* HIDE ENROLLED COURSES IF EDUCATOR */}
               {data?.role !== "educator" && (
