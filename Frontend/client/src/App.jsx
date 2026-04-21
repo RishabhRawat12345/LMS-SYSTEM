@@ -4,45 +4,53 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 
-// Components
+// Auth & Core Components
 import Signup from "./components/Signup/Signup";
 import Signin from "./components/Signin/Signin";
 import Home from "./components/Home/Home";
 import Profile from "./components/Profile/Profile";
-import Course from "./components/Educator/Course";
-import Forgetpass from "./components/passwordreset/Forgetpass";
-import Otp from "./components/passwordreset/Otp";
-import Resetpass from "./components/passwordreset/Resetpass";
 import Role from "./components/role/Role";
+import Nav from "./components/nav/Nav";
+
+// Educator Components
+import Course from "./components/Educator/Course";
 import Dashboard from "./components/Educator/Dashboard";
 import CreateCourse from "./components/Educator/CreateCourse";
 import EditCourse from "./components/Educator/EditCourse";
 import ViewAllcourses from "./components/Educator/ViewAllcourses";
 import CreateLecture from "./components/Educator/CreateLecture";
-import Nav from "./components/nav/Nav";
 import EditLecture from "./components/Educator/EditLecture";
 import AboutCourse from "./components/Educator/AboutCourse";
-import Cancel from "./components/Success/Cancel"; // Check path consistency
-import PaymentSuccess from "./components/Success/Success"; // Check path consistency
 
-// Hooks - CRITICAL: Ensure filenames match these imports exactly
-import useUserHook from "./hooks/userhooks"; 
-import useCourseHooks from "./hooks/useCourseHooks"; 
+// Password Reset
+import Forgetpass from "./components/passwordreset/Forgetpass";
+import Otp from "./components/passwordreset/Otp";
+import Resetpass from "./components/passwordreset/Resetpass";
 
-// Redux
+// Success/Cancel Components - FIXED PATHS
+// Assuming these are in src/components/Success/ or src/Success/
+// If they are in src/Success, use "./Success/Cancel"
+import Cancel from "./components/Success/Cancel"; 
+import PaymentSuccess from "./components/Success/Success";
+
+// Hooks & Redux
+import useUserHook from "./hooks/userhooks";
+import usecoursehooks from "./hooks/usecoursehooks";
 import { getcourse } from "./redux/courseSlice";
 
 const App = () => {
   const dispatch = useDispatch();
   const location = useLocation();
 
-  // Destructure hooks safely
-  const { getUserById } = useUserHook();
-  const { fetchData } = useCourseHooks(); // Using Capital D to match hook return
+  // Defensive destructuring
+  const userHook = useUserHook();
+  const courseHook = usecoursehooks();
+  
+  const getUserById = userHook?.getUserById;
+  const fetchdata = courseHook?.fetchData || courseHook?.fetchdata;
 
   const userid = localStorage.getItem("userid");
 
-  // 1. Initial Data Load
   useEffect(() => {
     if (userid && typeof getUserById === "function") {
       getUserById(userid);
@@ -53,29 +61,25 @@ const App = () => {
       try {
         dispatch(getcourse(JSON.parse(saved)));
       } catch (e) {
-        console.error("Failed to parse saved courses", e);
+        console.error("Error parsing saved courses:", e);
       }
     }
 
-    // Defensive check to prevent "r is not a function" crash
-    if (typeof fetchData === "function") {
-      fetchData();
+    if (typeof fetchdata === "function") {
+      fetchdata();
     }
-  }, [userid, fetchData, dispatch]);
+  }, [userid, fetchdata, dispatch, getUserById]);
 
-  // 2. Refresh Data on Route Change
   useEffect(() => {
     const refreshRoutes = ["/courses", "/dash"];
-    if (refreshRoutes.includes(location.pathname) && typeof fetchData === "function") {
-      fetchData();
+    if (refreshRoutes.includes(location.pathname) && typeof fetchdata === "function") {
+      fetchdata();
     }
-  }, [location.pathname, fetchData]);
+  }, [location.pathname, fetchdata]);
 
-  // Redux Selectors
   const userdata = useSelector((state) => state.auth.user);
   const courses = useSelector((state) => state.course.course);
 
-  // UI Logic
   const hideNavRoutes = ["/", "/signin", "/role", "/editc", "/courses", "/createl", "/aboutC", "/viewc"];
   const shouldShowNav = !hideNavRoutes.includes(location.pathname);
 
@@ -83,7 +87,6 @@ const App = () => {
     <>
       {shouldShowNav && <Nav />}
       <ToastContainer position="top-right" autoClose={3000} theme="colored" />
-      
       <Routes>
         <Route path="/" element={<Signup userdata={userdata} />} />
         <Route path="/signin" element={<Signin />} />
