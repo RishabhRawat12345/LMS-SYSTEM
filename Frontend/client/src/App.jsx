@@ -3,6 +3,8 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
+
+// Components
 import Signup from "./components/Signup/Signup";
 import Signin from "./components/Signin/Signin";
 import Home from "./components/Home/Home";
@@ -18,45 +20,62 @@ import EditCourse from "./components/Educator/EditCourse";
 import ViewAllcourses from "./components/Educator/ViewAllcourses";
 import CreateLecture from "./components/Educator/CreateLecture";
 import Nav from "./components/nav/Nav";
-import useUserHook from "./hooks/userhooks";
-import usecoursehooks from "./hooks/usecoursehooks";
-import { getcourse } from "./redux/courseSlice";
 import EditLecture from "./components/Educator/EditLecture";
 import AboutCourse from "./components/Educator/AboutCourse";
-import Cancel from "../Success/Cancel";
-import PaymentSuccess from "../Success/Success";
+import Cancel from "./components/Success/Cancel"; // Check path consistency
+import PaymentSuccess from "./components/Success/Success"; // Check path consistency
+
+// Hooks - CRITICAL: Ensure filenames match these imports exactly
+import useUserHook from "./hooks/userhooks"; 
+import useCourseHooks from "./hooks/useCourseHooks"; 
+
+// Redux
+import { getcourse } from "./redux/courseSlice";
 
 const App = () => {
   const dispatch = useDispatch();
   const location = useLocation();
 
+  // Destructure hooks safely
   const { getUserById } = useUserHook();
-  const { fetchdata } = usecoursehooks();
+  const { fetchData } = useCourseHooks(); // Using Capital D to match hook return
 
   const userid = localStorage.getItem("userid");
 
+  // 1. Initial Data Load
   useEffect(() => {
-    if (userid) {
+    if (userid && typeof getUserById === "function") {
       getUserById(userid);
     }
 
-    const saved = JSON.parse(localStorage.getItem("courses"));
+    const saved = localStorage.getItem("courses");
     if (saved) {
-      dispatch(getcourse(saved));
+      try {
+        dispatch(getcourse(JSON.parse(saved)));
+      } catch (e) {
+        console.error("Failed to parse saved courses", e);
+      }
     }
 
-    fetchdata();
-  }, []);
+    // Defensive check to prevent "r is not a function" crash
+    if (typeof fetchData === "function") {
+      fetchData();
+    }
+  }, [userid, fetchData, dispatch]);
 
+  // 2. Refresh Data on Route Change
   useEffect(() => {
-    if (location.pathname === "/courses" || location.pathname === "/dash") {
-      fetchdata();
+    const refreshRoutes = ["/courses", "/dash"];
+    if (refreshRoutes.includes(location.pathname) && typeof fetchData === "function") {
+      fetchData();
     }
-  }, [location.pathname]);
+  }, [location.pathname, fetchData]);
 
+  // Redux Selectors
   const userdata = useSelector((state) => state.auth.user);
   const courses = useSelector((state) => state.course.course);
 
+  // UI Logic
   const hideNavRoutes = ["/", "/signin", "/role", "/editc", "/courses", "/createl", "/aboutC", "/viewc"];
   const shouldShowNav = !hideNavRoutes.includes(location.pathname);
 
@@ -64,6 +83,7 @@ const App = () => {
     <>
       {shouldShowNav && <Nav />}
       <ToastContainer position="top-right" autoClose={3000} theme="colored" />
+      
       <Routes>
         <Route path="/" element={<Signup userdata={userdata} />} />
         <Route path="/signin" element={<Signin />} />
