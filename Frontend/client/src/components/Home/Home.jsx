@@ -49,18 +49,7 @@ const Home = ({ userdata, coursedata }) => {
         <img src={home} alt="home" className="w-full h-full object-cover" />
       </div>
 
-      {/* 2. Course Section - Using the filtered 'displayCourses' */}
-      <div className="last w-full flex flex-col justify-center py-10 bg-gray-50">
-        <h1 className="text-2xl font-bold text-center mb-6">
-          {userdata?.role === "student" ? "Recommended for You" : "Our Popular Courses"}
-        </h1>
-        
-        {displayCourses && displayCourses.length > 0 ? (
-          <CardPage coursedata={displayCourses} />
-        ) : (
-          <p className="text-center text-gray-500">No courses available at the moment.</p>
-        )}
-      </div>
+      
 
       <Footer />
     </div>
