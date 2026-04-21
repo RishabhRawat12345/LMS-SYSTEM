@@ -63,7 +63,7 @@ const AboutCourse = ({ userdata }) => {
   const handleplayvideo = async (id) => {
     try {
       const res = await axios.get(
-        `http://localhost:8000/api/course/lecture/${id}`,
+        `https://lms-system-1-183s.onrender.com/api/course/lecture/${id}`,
         { withCredentials: true }
       );
       if (res.status === 200) setVideo(res.data.lecture.videoUrl);
@@ -79,7 +79,7 @@ const AboutCourse = ({ userdata }) => {
         return;
       }
       const res = await axios.post(
-        `http://localhost:8000/api/course/enrolled/${courseId}`,
+        `https://lms-system-1-183s.onrender.com/api/course/enrolled/${courseId}`,
         {},
         { withCredentials: true }
       );
@@ -94,7 +94,7 @@ const AboutCourse = ({ userdata }) => {
     try {
       const payload = { Comments: form.Comment, Rating: rating, courseId };
       const res = await axios.post(
-        `http://localhost:8000/api/course/review/${courseId}`,
+        `https://lms-system-1-183s.onrender.com/api/course/review/${courseId}`,
         payload,
         { withCredentials: true }
       );
