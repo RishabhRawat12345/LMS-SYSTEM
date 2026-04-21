@@ -1,24 +1,34 @@
 import axios from 'axios';
-import React from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux';
 import { coursestart, getcourse } from '../redux/courseSlice';
 
-const coursehooks = () => {
-  const dispatch=useDispatch();
- 
-  const fetchdata=async()=>{
+const useCourseHooks = () => { // Renamed to use... (React convention)
+  const dispatch = useDispatch();
+
+  const fetchData = async () => {
     try {
       dispatch(coursestart());
-      const res=await axios.get("https://lms-system-1-183s.onrender.com/api/course/getCreator",{withCredentials:true});
-     
-      console.log("the courses is",res.data);
-      dispatch(getcourse(res.data.creatorCourse))
-      return res.data.creatorCourse;
-    } catch (error) {
-      console.log(`the course error is :${error}`);
-    }
-  }
-  return {fetchdata}
-}
+      const res = await axios.get("https://lms-system-1-183s.onrender.com/api/course/getCreator", {
+        withCredentials: true
+      });
 
-export default coursehooks
+      // Log the full response to see the structure
+      console.log("Full API Response:", res.data);
+
+      if (res.data && res.data.creatorCourse) {
+        dispatch(getcourse(res.data.creatorCourse));
+        return res.data.creatorCourse;
+      } else {
+        console.warn("Data received, but 'creatorCourse' is missing:", res.data);
+      }
+      
+    } catch (error) {
+      // Improved error logging
+      console.error("Fetch Error:", error.response?.data || error.message);
+    }
+  };
+
+  return { fetchData };
+};
+
+export default useCourseHooks;
