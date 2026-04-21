@@ -95,7 +95,7 @@ const Profile = () => {
   return (
     <div className='flex justify-center items-center min-h-screen w-full bg-gray-200'>
 
-      <div className={`center ${edit===false?`h-145`:`h-167`} w-160 shadow-2xl rounded-2xl bg-white flex flex-col`}>
+      <div className={`center ${edit===false?`h-145`:`h-167`} w-160 shadow-2xl rounded-2xl bg-white flex flex-col mt-[96px]`}>
 
         <div className="flex w-full gap-50 p-6">
           <FaArrowLeft onClick={()=>navigate("/home")} className='h-7 w-7' />
