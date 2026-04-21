@@ -4,6 +4,15 @@ import { initializeApp } from "firebase/app";
 // https://firebase.google.com/docs/web/setup#available-libraries
 import {getAuth, GoogleAuthProvider} from "firebase/auth"
 // Your web app's Firebase configuration
+
+const firebaseConfig = {
+  apiKey: import.meta.env.VITE_FIRE_KEY,
+  authDomain: "fir-2e7f2.firebaseapp.com",
+  projectId: "fir-2e7f2",
+  storageBucket: "fir-2e7f2.firebasestorage.app",
+  messagingSenderId: "555800197112",
+  appId: "1:555800197112:web:5a1e7d4dabd92438e7480d",
+};
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIRE_KEY,
   authDomain: "lms-5477b.firebaseapp.com",
