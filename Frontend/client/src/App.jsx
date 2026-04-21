@@ -3,51 +3,38 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
-
-// Auth & Core Components
 import Signup from "./components/Signup/Signup";
 import Signin from "./components/Signin/Signin";
 import Home from "./components/Home/Home";
 import Profile from "./components/Profile/Profile";
-import Role from "./components/role/Role";
-import Nav from "./components/nav/Nav";
-
-// Educator Components
 import Course from "./components/Educator/Course";
+import Forgetpass from "./components/passwordreset/Forgetpass";
+import Otp from "./components/passwordreset/Otp";
+import Resetpass from "./components/passwordreset/Resetpass";
+import Role from "./components/role/Role";
 import Dashboard from "./components/Educator/Dashboard";
 import CreateCourse from "./components/Educator/CreateCourse";
 import EditCourse from "./components/Educator/EditCourse";
 import ViewAllcourses from "./components/Educator/ViewAllcourses";
 import CreateLecture from "./components/Educator/CreateLecture";
-import EditLecture from "./components/Educator/EditLecture";
-import AboutCourse from "./components/Educator/AboutCourse";
-
-// Password Reset
-import Forgetpass from "./components/passwordreset/Forgetpass";
-import Otp from "./components/passwordreset/Otp";
-import Resetpass from "./components/passwordreset/Resetpass";
-
-// Success/Cancel Components - FIXED PATHS
-// Assuming these are in src/components/Success/ or src/Success/
-// If they are in src/Success, use "./Success/Cancel"
-import Cancel from "./components/Success/Cancel"; 
-import PaymentSuccess from "./components/Success/Success";
-
-// Hooks & Redux
+import Nav from "./components/nav/Nav";
 import useUserHook from "./hooks/userhooks";
 import usecoursehooks from "./hooks/usecoursehooks";
 import { getcourse } from "./redux/courseSlice";
+import EditLecture from "./components/Educator/EditLecture";
+import AboutCourse from "./components/Educator/AboutCourse";
+import Cancel from "../Success/Cancel";
+import PaymentSuccess from "../Success/Success";
 
 const App = () => {
   const dispatch = useDispatch();
   const location = useLocation();
 
-  // Defensive destructuring
-  const userHook = useUserHook();
-  const courseHook = usecoursehooks();
+  const { getUserById } = useUserHook();
   
-  const getUserById = userHook?.getUserById;
-  const fetchdata = courseHook?.fetchData || courseHook?.fetchdata;
+  // THE FIX: We extract both possible names to ensure it's not undefined
+  const hookData = usecoursehooks();
+  const fetchdata = hookData?.fetchData || hookData?.fetchdata;
 
   const userid = localStorage.getItem("userid");
 
@@ -56,24 +43,23 @@ const App = () => {
       getUserById(userid);
     }
 
-    const saved = localStorage.getItem("courses");
+    const saved = JSON.parse(localStorage.getItem("courses"));
     if (saved) {
-      try {
-        dispatch(getcourse(JSON.parse(saved)));
-      } catch (e) {
-        console.error("Error parsing saved courses:", e);
-      }
+      dispatch(getcourse(saved));
     }
 
+    // THE FIX: Guard the function call
     if (typeof fetchdata === "function") {
       fetchdata();
     }
-  }, [userid, fetchdata, dispatch, getUserById]);
+  }, [userid, fetchdata]);
 
   useEffect(() => {
-    const refreshRoutes = ["/courses", "/dash"];
-    if (refreshRoutes.includes(location.pathname) && typeof fetchdata === "function") {
-      fetchdata();
+    if (location.pathname === "/courses" || location.pathname === "/dash") {
+      // THE FIX: Guard the function call
+      if (typeof fetchdata === "function") {
+        fetchdata();
+      }
     }
   }, [location.pathname, fetchdata]);
 
