@@ -7,13 +7,6 @@ import { useNavigate } from "react-router-dom";
 
 const Home = ({ userdata, coursedata }) => {
   const navigate = useNavigate();
-
-  useEffect(() => {
-    // Keeping logs for debugging your props
-    console.log("Home user data:", userdata);
-    console.log("Home course data:", coursedata);
-  }, [userdata]);
-
   return (
     <div className="min-h-screen w-full flex flex-col">
       {/* 1. Navigation */}
