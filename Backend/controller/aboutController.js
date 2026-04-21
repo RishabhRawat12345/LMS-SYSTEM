@@ -90,8 +90,8 @@ export const EnrollCourse = async (req, res) => {
         userId: userId.toString(),
       },
 
-      success_url: `http://localhost:5173/payment-success?courseId=${courseId}`,
-      cancel_url: `http://localhost:5173/payment-cancel`,
+      success_url: `https://lms-system-1-183s.onrender.com/payment-success?courseId=${courseId}`,
+      cancel_url: `https://lms-system-1-183s.onrender.com/payment-cancel`,
     });
 
     return res.status(200).json({
