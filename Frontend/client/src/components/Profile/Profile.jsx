@@ -70,7 +70,7 @@ const Profile = () => {
     console.log("Profile update data:", formData);
 
     const res = await axios.put(
-      "http://localhost:8000/api/auth/profile-updater",
+      "https://lms-system-1-183s.onrender.com/api/auth/profile-updater",
       formData,
       {
         headers: {
