@@ -84,7 +84,7 @@ const Profile = () => {
 
           {edit === false && (
             <form className='w-[60%] flex flex-col gap-4 justify-center items-center mt-6'>
-              <div className="flex items-center gap-2 w-full">
+              <div className="flex items-center gap-2 w-full text-center">
                 <input value={data?.email || ""} className='flex-1 h-10 rounded text-sm font-semibold outline-none' readOnly />
               </div>
 
