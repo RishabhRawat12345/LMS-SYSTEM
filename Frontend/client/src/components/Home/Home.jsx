@@ -3,37 +3,33 @@ import Nav from "../nav/Nav";
 import home from "../../assets/home1.jpg";
 import { SiViaplay } from "react-icons/si";
 import Footer from "../Footer/Footer";
-import CardPage from "../Educator/CardPage";
 import { useNavigate } from "react-router-dom";
 
 const Home = ({ userdata, coursedata }) => {
   const navigate = useNavigate();
 
-  // 1. Filter data based on role
-  // If user is a student, only show published courses. 
-  // If no user is logged in, we usually default to showing only published courses.
-  const displayCourses = userdata?.role === "student" || !userdata 
-    ? coursedata?.filter(course => course.isPublised === true) 
-    : coursedata;
-
   useEffect(() => {
-    const data = JSON.parse(localStorage.getItem("tokensign"));
-    console.log("Current User Role:", userdata?.role);
-    console.log("Filtered Courses for Student:", displayCourses);
-  }, [userdata, coursedata]);
+    // Keeping logs for debugging your props
+    console.log("Home user data:", userdata);
+    console.log("Home course data:", coursedata);
+  }, [userdata]);
 
   return (
     <div className="min-h-screen w-full flex flex-col">
-      {/* Hero Section */}
+      {/* 1. Navigation */}
+      <Nav />
+
+      {/* 2. Hero Section */}
       <div className="w-full flex-1 relative">
-        <div className="absolute inset-0 flex flex-col items-center text-white text-center font-bold px-4 top-5 text-2xl sm:text-3xl md:text-5xl lg:text-7xl lg:mt-20">
+        <div className="absolute inset-0 flex flex-col items-center text-white text-center font-bold px-4 top-5 text-2xl sm:text-3xl md:text-5xl lg:text-7xl lg:mt-20 z-10">
           <span>Grow Your Skills to Advance</span>
           <span>Your Career Path</span>
           
           <div className="flex gap-4 mt-[80%] md:mt-10 absolute lg:mt-50">
             <button 
               onClick={() => {
-                navigate("/viewc", { state: { coursedata: displayCourses } });
+                // Navigates to view all courses page, passing original coursedata
+                navigate("/viewc", { state: { coursedata } });
               }} 
               className="px-6 flex py-3 border border-black text-black text-sm md:text-lg hover:bg-white hover:text-black transition rounded lg:border-white lg:text-white gap-3"
             >
@@ -46,11 +42,16 @@ const Home = ({ userdata, coursedata }) => {
             </button>
           </div>
         </div>
-        <img src={home} alt="home" className="w-full h-full object-cover" />
+
+        {/* Background Image */}
+        <img 
+          src={home} 
+          alt="home" 
+          className="w-full h-full object-cover min-h-[500px]" 
+        />
       </div>
 
-      
-
+      {/* 3. Footer (Course section logic was here and is now removed) */}
       <Footer />
     </div>
   );
