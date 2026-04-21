@@ -25,7 +25,7 @@ const AboutCourse = ({ userdata }) => {
   const fetchcoursedata = async () => {
     try {
       const res = await axios.get(
-        ` https://lms-system-1-183s.onrender.com/api/course/aboutC/${courseId}`,
+        `https://lms-system-1-183s.onrender.com/api/course/aboutC/${courseId}`,
         { withCredentials: true }
       );
       if (res.status === 200) {
@@ -45,7 +45,7 @@ const AboutCourse = ({ userdata }) => {
   const fetchReviews = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:8000/api/course/review/${courseId}`
+        `https://lms-system-1-183s.onrender.com/api/course/review/${courseId}`
       );
       if (res.status === 200) Setreview(res.data);
     } catch (error) {
